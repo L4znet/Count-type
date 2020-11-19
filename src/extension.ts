@@ -1,50 +1,30 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from 'vscode'
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export function activate (context: vscode.ExtensionContext) {
+  let disposable = vscode.commands.registerCommand(
+    'masuperextension.helloWorld',
+    () => {
+      const backspace = vscode.window.createStatusBarItem(
+        vscode.StatusBarAlignment.Right,
+        1000
+      )
+      const cmd_z = vscode.window.createStatusBarItem(
+        vscode.StatusBarAlignment.Right,
+        1000
+      )
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "masuperextension" is now active!');
+      function handleChange (event: any) {
+        backspace.text =
+          'Retour arrière : ' + event.textEditor._documentData._lines[0]
+        cmd_z.text = 'CMD + Z : ' + event.textEditor._documentData._lines[0]
+        backspace.show()
+        cmd_z.show()
+      }
+      vscode.window.onDidChangeTextEditorSelection(handleChange)
+    }
+  )
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('masuperextension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
-		// TODO: fetch command from settings
-		
-		function handleChange(event:any) {
-			console.log("Change in the text editor");
-			statusBarItem.text = 'sdf' + event.textEditor._documentData._lines[0];
-			statusBarItem.show();
-		}
-		vscode.window.onDidChangeTextEditorSelection(handleChange)
-		 
-		
-	});
-
-	
-
-  
- 	context.subscriptions.push(disposable);
-
-
-
+  context.subscriptions.push(disposable)
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
-
-
-
-
-
-
-
-
-
+export function deactivate () {}
